@@ -69,4 +69,5 @@ index = faiss.IndexFlatL2(2048)
 # stack arrays in sequence vertically (row wise).
 descriptors = np.vstack(descriptors)
 index.add(descriptors)
+# save the index object to output file
 faiss.write_index(index, f"{data_dir}/faiss_index")
