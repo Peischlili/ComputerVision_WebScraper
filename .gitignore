@@ -1,1 +1,6 @@
-WebScraper/venv/
+# ignore virtual env files
+cv_venv/
+app/
+
+# ignore all notebook checkpoints
+.ipynb_checkpoints

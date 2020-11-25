@@ -31,4 +31,11 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from webdriver_manager.utils import ChromeType
 from selenium.webdriver import ChromeOptions
-
+import torch
+from torch import nn
+from torch.nn import functional as F
+import matplotlib.pyplot as plt
+from torchvision import models, transforms, datasets
+import faiss
+import pandas as pd
+import ssl
