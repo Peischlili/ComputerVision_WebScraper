@@ -1,6 +1,14 @@
-# ignore virtual env files
+# ignore folders
 cv_venv/
-app/
+WebScraper/bdd
+WebScraper/static/database_images
+WebScraper/static/images
 
 # ignore all notebook checkpoints
 .ipynb_checkpoints/
+
+# ignore following formated files
+.jpg
+.jpeg
+.png
+.txt

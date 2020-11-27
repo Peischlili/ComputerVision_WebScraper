@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="static/css/style.css">
+<html lang="en">
+
+<html>
+  <head>
+    <title>Project 4 - Demonstration</title>
+    <meta name="description" content="Benchmarker of your product.">
+    <meta charset="utf-8">
+  </head>
+  <body>
+  <h2>Welcome to the benchmarker of Project 4</h2>
+
+   <!-- Form which will send a POST request -->
+   <form method="POST" action="" enctype="multipart/form-data">
+     <p>Please select your image.jpg:
+      <p><input name="image" placeholder="Select the file" id="input_image" type="file" accept="image/jpeg"></p>
+     </p>
+      <p><input type="submit" value="Submit"></p>
+    </form>
+
+    <div class = "container">
+        <div class="flexbox">
+            <div>
+                <p>User product profile</p>
+                <img class="unify-image" src="{{ url_for('display_image', filename=filename) }}" alt="User image">
+            </div>
+        </div>
+        <div class="flexbox">
+            <div>
+                <p>Neighbor 1</p>
+                <img class="unify-image" src="{{ url_for('search_neighbor', filename=filename, list_index=0) }}" alt="1st Closest neighbor">
+            </div>
+            <div>
+                <p>Neighbor 2</p>
+                <img class="unify-image" src="{{ url_for('search_neighbor', filename=filename, list_index=1) }}" alt="2nd Closest neighbor">
+            </div>
+            <div>
+                <p>Neighbor 3</p>
+                <img class="unify-image" src="{{ url_for('search_neighbor', filename=filename, list_index=2) }}" alt="3rd Closest neighbor">
+            </div>
+            <div>
+                <p>Neighbor 4</p>
+                <img class="unify-image" src="{{ url_for('search_neighbor', filename=filename, list_index=3) }}" alt="4th Closest neighbor">
+            </div>
+        </div>
+    </div>
+
+  </body>
+</html>
