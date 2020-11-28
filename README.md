@@ -19,7 +19,7 @@ For dress detection we used the Yolov3 under Darknet architecture based on the D
 #### Comparaison of training results
 In order to prepare the performance of 2 models, the main metric we used is IoU (Interception over Union), but we also take into account the average process time per image (in Google Colab environment). IoU shows the overlapping leve of predicted bounding box and annotations, while process time is a main concern for us in the upcoming scraping step and determines largely if the model is scalable and the difficulty to build a database with decent number of images. The comparaison could be found in the following table. 
 
-<img src="assets/model_perf.png" width="600" height="400">
+<img src="assets/model_perf.png" width="600" height="150">
 
 From the recap table, we can observe a huge speed difference between FasterRCNN and Yolov3: Yolo is nearly 10 times faster in both training and prediction. While as imagined, FasterRCNN surpassed Yolov3 in precision but especially IoU. However, one remarkable phenomenum is that Yolov3 has better recall, meaning that FasterRCNN tends to make a lot more false negative errors.
 
@@ -35,11 +35,11 @@ From above metrics, it's obvious that both models have their strength and can th
 #### Similarity search with ResNet50 and Faiss
 Architecture to find k closest neighbors
 
-<img src="assets/simi_search.png" width="600" height="400">
+<img src="assets/simi_search.png" width="600" height="200">
 
 The cropped images were passed to python package ResNet50, one of the CNN models, to extract features. With Faiss, features vectors were indexed for each of the images in a numerical representation. As shown in the following dataframe, each image is presented as a horizontal vector of 2048 columns, and the database contains of 17,323 images. 
 
-<img src="assets/feature_vector.png" width="500" height="150">
+<img src="assets/feature_vector.png" width="900" height="300">
 
 As input image is provided by user, the image will go through the same ResNet50 neural network model and returns a vector of the same length (2048x1). With the help of Faiss, this vector is going to compared to each single horizontal vector in the database such that we can find the closest one(s).
 
