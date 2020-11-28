@@ -6,9 +6,3 @@ WebScraper/static/images
 
 # ignore all notebook checkpoints
 .ipynb_checkpoints/
-
-# ignore following formated files
-.jpg
-.jpeg
-.png
-.txt
