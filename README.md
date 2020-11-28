@@ -10,30 +10,51 @@ In order to propose such service, we need to first build a database easily scala
 ## Methodology and Results:
 
 #### Dataset for training
-<img src="assets/google_dataset.png", width="250", height="300">
+<img src="assets/google_dataset.png" width="400" height="500">
 We use google open source dataset that comes with annotations. Those images have all various background noise and sometimes multiple target objects on single images. The sample annotation follows following format: object class, xmin of box, ymin of box, xmax of box and ymax of box. And this is usable only for FasterRCNN training. For Yolov3 training under [Darknet](https://github.com/AlexeyAB/darknet) framework, the annotations should be processed accordingly as written in the documentation of the repository.
 
-This web scraper is an academic project containing 3 main parts:
+#### Model training with Yolov3 and FasterRCNN
+For dress detection we used the Yolov3 under Darknet architecture based on the Darknet53 ResNet. Yolo in general is fast in training and detection thanks to object localisation and classification processing simultanenously. In parallel, FasterRCNN is the fastest among the RCNN models (not comparable to Yolo though) and accurate in terms of prediciton. To be able to profit the best detection performance for scraping process, we process model training on both models at the same time. Limited by local machine CPU capacity, the training was executed on Google Colab notebooks to be able to use CUDA for GPU computing on same dataset of 30, 000 dress images. 
 
-* An object-detection model trained to detect dresses
-* This object-detection model is used in scraping webpages each time it detects a dress, and fill a database with informations concerning the object detected (price, image, brand, etc.)
-* Once the database filled, a neural network model is used and troncated at the last fully connected layer to act as a recommender. It takes an image as input, and outputs closest vector: the attributes of most similar image in our database (brand, price, etc.)
+#### Comparaison of training results
+In order to prepare the performance of 2 models, the main metric we used is IoU (Interception over Union), but we also take into account the average process time per image (in Google Colab environment). IoU shows the overlapping leve of predicted bounding box and annotations, while process time is a main concern for us in the upcoming scraping step and determines largely if the model is scalable and the difficulty to build a database with decent number of images. The comparaison could be found in the following table. 
 
-## Methodology:
-###### Model training for detection:
-  2 models involved: FasterRCNN with PyTorch and Yolov3
-  * /FasterRCNN_training: trained with 30,000 images, within PyTorch under Google Colab env 
-  * /Yolo3_training: trained with 17,000 images, under framework of Darknet under Google Colab env
-  * Summary: FasterRCNN more accurate in terms of positive cases, but a lot slower to train
+<img src="assets/model_perf.png" width="600" height="400">
 
-###### Scraping with detection model:
-  * /WebScraper: 
-  * Taking consideration the detection speed advantage of Yolov3 (22 milliseconds vs several seconds compared to FasterRCNN), the choice of model was made to Yolov3 for scraping part. The main website to build a database is zalando.fr and a dataset of 17,000 images was build thanks to the scraper_with_predict.py
+From the recap table, we can observe a huge speed difference between FasterRCNN and Yolov3: Yolo is nearly 10 times faster in both training and prediction. While as imagined, FasterRCNN surpassed Yolov3 in precision but especially IoU. However, one remarkable phenomenum is that Yolov3 has better recall, meaning that FasterRCNN tends to make a lot more false negative errors.
 
-###### Similarity research:
-  * /WebScraper/similaritySearch was built with open source package faiss-cpu (since the project is not on the cloud for the moment, otherwise faiss-gpu will have computation capability advantage). 
-  * with saved index and last layer long vectors, the search_index function finds k nearest neighbors in built dataset from our scrapped images.
+The following figure shows some typical detection examples of the 2 models.
 
-###### Web application
-  * /WebScraper/app.py
-  * A simple web application was built with python Flask package, containing maining app.py and index.html, controling routes and views and displaying nearest neighbors
+<img src="assets/iou_y_vs_f.png" width="600" height="400">
+
+#### Conclusion and usage of models
+From above metrics, it's obvious that both models have their strength and can thus compensate their shortage. 
+* For scraper part, the precision and IoU are not determinant factor since we don't need the detection model to draw bounding boxes and need only that it tells if there is such object (dress). Meanwhile, speed is also important so that we can form a database much more quickly. Without hesitation, Yolov3 is the perfect model for this task and indeed it is applied in web scraping. 
+* On the contrary, for similarity search part, we will need a detection model to tell which region of the user image contains searched object and to draw bounding box. In this case, a high IoU is preferable and the choice went easily to FasterRCNN. Likewise, for the similarity search model outputs proper results, the input images should also be process (cropped and remain only the bounding box region).
+
+#### Similarity search with ResNet50 and Faiss
+Architecture to find k closest neighbors
+
+<img src="assets/simi_search.png" width="600" height="400">
+
+The cropped images were passed to python package ResNet50, one of the CNN models, to extract features. With Faiss, features vectors were indexed for each of the images in a numerical representation. As shown in the following dataframe, each image is presented as a horizontal vector of 2048 columns, and the database contains of 17,323 images. 
+<img src="assets/feature_vectors.png" width="600" height="400">
+As input image is provided by user, the image will go through the same ResNet50 neural network model and returns a vector of the same length (2048x1). With the help of Faiss, this vector is going to compared to each single horizontal vector in the database such that we can find the closest one(s).
+
+#### Web Application Interface
+To have better visualisation of the test phrase of our model, a simple application was made to interact with user.
+
+Technical keypoints:
+* build with Python Flask as backend programing language
+* frontend client with HTML routed by Flask
+* application accessible from your browser following address: http://0.0.0.0:5000/
+
+User journey:
+* user goes to the web site
+* select the image that he would like to find/compare/benchmark and submit to the app
+* application returns 4 closest neighbors in our database
+* application returns information (price/brand/etc.) concerning those items to user (feature to come very soon ...)
+
+Have a look at our website!
+
+<img src="assets/website.png" width="600" height="400">
