@@ -38,7 +38,9 @@ Architecture to find k closest neighbors
 <img src="assets/simi_search.png" width="600" height="400">
 
 The cropped images were passed to python package ResNet50, one of the CNN models, to extract features. With Faiss, features vectors were indexed for each of the images in a numerical representation. As shown in the following dataframe, each image is presented as a horizontal vector of 2048 columns, and the database contains of 17,323 images. 
-<img src="assets/feature_vectors.png" width="600" height="400">
+
+<img src="assets/feature_vector.png" width="500" height="150">
+
 As input image is provided by user, the image will go through the same ResNet50 neural network model and returns a vector of the same length (2048x1). With the help of Faiss, this vector is going to compared to each single horizontal vector in the database such that we can find the closest one(s).
 
 #### Web Application Interface
@@ -57,4 +59,4 @@ User journey:
 
 Have a look at our website!
 
-<img src="assets/website.png" width="600" height="400">
+<img src="assets/website.png" width="800" height="600">
