@@ -10,7 +10,7 @@ In order to propose such service, we need to first build a database easily scala
 ## Methodology and Results:
 
 #### Dataset for training
-<img src="assets/google_dataset.png">
+<img src="assets/google_dataset.png", width="250", height="300">
 We use google open source dataset that comes with annotations. Those images have all various background noise and sometimes multiple target objects on single images. The sample annotation follows following format: object class, xmin of box, ymin of box, xmax of box and ymax of box. And this is usable only for FasterRCNN training. For Yolov3 training under [Darknet](https://github.com/AlexeyAB/darknet) framework, the annotations should be processed accordingly as written in the documentation of the repository.
 
 This web scraper is an academic project containing 3 main parts:
