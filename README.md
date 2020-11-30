@@ -37,7 +37,11 @@ Architecture to find k closest neighbors
 
 <img src="assets/simi_search.png" width="600" height="200">
 
-The cropped images were passed to python package ResNet50, one of the CNN models, to extract features. With Faiss, features vectors were indexed for each of the images in a numerical representation. As shown in the following dataframe, each image is presented as a horizontal vector of 2048 columns, and the database contains of 17,323 images. 
+The cropped images were passed to python TorchVision model ResNet50, one of the CNN models, to extract features. There exists numbers of convolutional models for feature extraction use. In order to find a decent model that favored the searched features (such as color/fabric/patterns, etc.) on our specific object in a human point of view, we tested ResNet50 and ResNet101. From the illustration below, we observed slight improvement using ResNet50 over ResNet101 on pattern and color feature capture when applying same test images. Thus, we decided the application of ResNet50 in building feature index. Of course, this process remains subjective to practionner and difficult to measure with metrics since distance between neighbors and profile image is numeric and does not make sense in human perspective.
+
+<img src="assets/resNet50_resNet101.png" width="800" height="350">
+
+With Faiss, features vectors were indexed for each of the images in a numerical representation. As shown in the following dataframe, each image is presented as a horizontal vector of 2048 columns, and the database contains of 17,323 images. 
 
 <img src="assets/feature_vector.png" width="900" height="300">
 
@@ -59,4 +63,4 @@ User journey:
 
 Have a look at our website!
 
-<img src="assets/website.png" width="800" height="600">
+<img src="assets/website.png" width="900" height="600">
